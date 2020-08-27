@@ -1,4 +1,4 @@
-package tj.selenium;
+package tj.selenium.login;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
