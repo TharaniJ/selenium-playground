@@ -12,6 +12,7 @@ public class MoodleHomePage {
     @FindBy(xpath = "//*[@id='page-wrapper']/nav//a[text()='Log in']")
     @CacheLookup
     private WebElement loginLink;
+
     public WebElement getLoginLink() {
         return loginLink;
     }
