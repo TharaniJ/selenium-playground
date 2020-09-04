@@ -1,18 +1,22 @@
-package tj.selenium.login;
+package tj.selenium.webdriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
-import sun.rmi.runtime.NewThreadAction;
+import org.slf4j.LoggerFactory;
+
+import java.util.logging.Logger;
 
 public class AutomateMoodle {
 
     public static void main(String[] args) {
+
         System.setProperty("webdriver.chrome.driver", "C:/EDU/Software/chromedriver_win32/chromedriver.exe");
 
         WebDriver webDriver = new ChromeDriver();
+
+
         try {
 
             //Navigate to the moodle site

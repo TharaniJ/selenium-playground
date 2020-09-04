@@ -1,5 +1,6 @@
 package tj.selenium.pom.pages;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
@@ -26,5 +27,9 @@ public class MoodleLoginPage {
         return loginButton;
     }
 
+    @FindBy(id = "loginerrormessage")
+    @CacheLookup
+    private WebElement loginErrorMessage;
+    public WebElement getLoginErrorMessage() { return loginErrorMessage; }
 
 }

@@ -53,9 +53,11 @@ public class MoodleLoginAutomation {
             moodleEditProfilePage.getLastNameTextBox().clear();
             moodleEditProfilePage.getLastNameTextBox().sendKeys("seku");
             Thread.sleep(2000);
-            moodleEditProfilePage.getEmailIDTextBx().clear();
-            moodleEditProfilePage.getEmailIDTextBx().sendKeys("arr1@gmail.com");
-            Thread.sleep(2000);
+           //  moodleEditProfilePage.getEmailIDTextBx().clear();
+           //  moodleEditProfilePage.getEmailIDTextBx().sendKeys("arr1@gmail.com");
+           //  Thread.sleep(2000);
+
+            moodleEditProfilePage.getEmailDisplayDropDown().selectByVisibleText("Hide my email address from non-privileged users");
             moodleEditProfilePage.getDescriptionTextBox().clear();
             moodleEditProfilePage.getDescriptionTextBox().sendKeys("Thank you so much, stay happy.");
             Thread.sleep(2000);
