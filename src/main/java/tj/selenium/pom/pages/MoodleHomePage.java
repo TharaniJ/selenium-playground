@@ -1,11 +1,8 @@
 package tj.selenium.pom.pages;
-
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 
-import javax.xml.bind.Element;
-import javax.xml.xpath.XPath;
 
 public class MoodleHomePage {
 
@@ -13,8 +10,21 @@ public class MoodleHomePage {
     @CacheLookup
     private WebElement loginLink;
 
+    @FindBy(xpath = "//div[@class='search-input-wrapper nav-link']")
+    @CacheLookup
+    private WebElement searchIconButton;
+
+    @FindBy(name = "q")
+    private WebElement dynamicSearchTextBox;
+
+
+    public WebElement getSearchIconButton() { return searchIconButton; }
+
+    public WebElement getDynamicSearchTextBox() { return dynamicSearchTextBox; }
+
     public WebElement getLoginLink() {
         return loginLink;
     }
+
 
 }
