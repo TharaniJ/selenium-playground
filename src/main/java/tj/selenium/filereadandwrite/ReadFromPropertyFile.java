@@ -20,7 +20,7 @@ public class ReadFromPropertyFile {
         FileReader configFileReader;
 
         //Defining web driver
-        WebDriver webDriver = null;
+        WebDriver webDriver = null ;
 
         try {
             //instantiate new file reader
@@ -34,6 +34,7 @@ public class ReadFromPropertyFile {
 
             //Navigate to the moodle site
             webDriver.get(configProperties.getProperty("selenium.moodle.url"));
+
             webDriver.manage().window().maximize();
 
             Thread.sleep(2000);

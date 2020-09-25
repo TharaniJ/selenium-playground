@@ -1,4 +1,4 @@
-package tj.selenium.alertsandactionclasses;
+package tj.selenium.actionandrobotclasses;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;

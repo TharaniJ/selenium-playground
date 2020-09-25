@@ -1,4 +1,4 @@
-package tj.selenium.alertsandactionclasses;
+package tj.selenium.alertsandchildwindows;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
