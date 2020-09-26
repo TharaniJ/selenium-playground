@@ -1,18 +1,3 @@
-/**
- * Micro-Test-1
- *
- * Steps:
- * Load this URL - https://www.seleniumeasy.com/test/basic-first-form-demo.html
- * Under “Single Input Field” form, enter the text “Test” in the text box
- * Click “Show Message”
- * Check whether it updates “Your Message:” to “Your Message: Test”
- *
- * Technical Requirements:
- * Must be implemented in a TestNG test case
- * A test configuration should be present
- */
-
-
 package tj.selenium.assignment;
 
 import org.openqa.selenium.By;
@@ -26,29 +11,29 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import tj.selenium.alertsandchildwindows.HandleChildWindow;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.List;
 import java.util.Properties;
 
-public class MicroAssignment1 {
+public class MicroAssignment2 {
     //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(HandleChildWindow.class);
+    private Logger LOGGER = LoggerFactory.getLogger(MicroAssignment2.class);
 
     //Defining web driver
-    WebDriver webDriver = null;
+    private WebDriver webDriver = null;
 
     //Defining file Reader
-    FileReader configFileReader;
+    private FileReader configFileReader;
 
     //Defining config file
-    File configFile;
+    private File configFile;
 
     //Defining the properties
-    Properties configProperties;
+    private Properties configProperties;
 
     @BeforeClass
     public void configSetup() {
@@ -91,7 +76,7 @@ public class MicroAssignment1 {
     }
 
     @Test
-    public void validateInput(){
+    public void validateNoOfRowsInTheTable(){
         try {
 
             //Navigate to the moodle site
@@ -104,20 +89,33 @@ public class MicroAssignment1 {
                     .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a[@href='#']")));
             noThanksBtn.click();
 
-            WebDriverWait waitForTextBox = new WebDriverWait(webDriver,10);
-            WebElement textBox = waitForTextBox.until(ExpectedConditions
-                    .elementToBeClickable(By.id("user-message")));
-            textBox.sendKeys(configProperties.getProperty("selenium.micro.assignment1.expectedResult"));
+            WebDriverWait waitForTableLink = new WebDriverWait(webDriver,10);
+            WebElement tableLink = waitForTableLink.until(ExpectedConditions
+                    .elementToBeClickable(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[3]/a")));
+            tableLink.click();
 
-            WebElement messageButton = webDriver.findElement(By.xpath("//*[@id='get-input']/button"));
-            messageButton.click();
+            WebElement tablePaginationLink = webDriver.findElement(By.linkText("Table Pagination"));
+            tablePaginationLink.click();
 
-            WebDriverWait waitForDisplayMessage = new WebDriverWait(webDriver,10);
-            WebElement displayMessage = waitForDisplayMessage.until(ExpectedConditions
-                    .visibilityOfElementLocated(By.id("display")));
+            WebElement table = webDriver.findElement(By.id("myTable"));
 
-            String expectedResult = configProperties.getProperty("selenium.micro.assignment1.expectedResult");
-            String actualResult = displayMessage.getText().trim();
+            List<WebElement> trList = table.findElements(By.tagName("tr"));
+            int index = 0;
+            for (WebElement tr : trList) {
+                index++;
+            }
+            LOGGER.info("Count of the index" + index);
+
+            WebDriverWait waitLastTable = new WebDriverWait(webDriver,10);
+            WebElement lastTable = waitLastTable.until(ExpectedConditions
+                    .elementToBeClickable(By.linkText("3")));
+            lastTable.click();
+
+            WebElement lastRowNo = webDriver.findElement(By.xpath("//*[@id=\"myTable\"]/tr[13]/td[1]"));
+
+
+            String expectedResult = Integer.toString(index);;
+            String actualResult = lastRowNo.getText().trim();
             LOGGER.info("Actual : " + actualResult + " Expected : " + expectedResult);
             Assert.assertEquals(actualResult, expectedResult);
 
@@ -139,3 +137,4 @@ public class MicroAssignment1 {
         LOGGER.info("Browser close successfully!");
     }
 }
+

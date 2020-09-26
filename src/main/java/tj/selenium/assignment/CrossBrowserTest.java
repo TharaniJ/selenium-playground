@@ -1,24 +1,10 @@
-/**
- * Micro-Test-1
- *
- * Steps:
- * Load this URL - https://www.seleniumeasy.com/test/basic-first-form-demo.html
- * Under “Single Input Field” form, enter the text “Test” in the text box
- * Click “Show Message”
- * Check whether it updates “Your Message:” to “Your Message: Test”
- *
- * Technical Requirements:
- * Must be implemented in a TestNG test case
- * A test configuration should be present
- */
-
-
 package tj.selenium.assignment;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -34,9 +20,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class MicroAssignment1 {
+public class CrossBrowserTest {
+
     //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(HandleChildWindow.class);
+    Logger LOGGER = LoggerFactory.getLogger(CrossBrowserTest.class);
 
     //Defining web driver
     WebDriver webDriver = null;
@@ -51,7 +38,8 @@ public class MicroAssignment1 {
     Properties configProperties;
 
     @BeforeClass
-    public void configSetup() {
+    @Parameters("browser")
+    public void configSetup(String browser) {
         try {
 
             //Assigning to the filepath to a variable
@@ -69,13 +57,19 @@ public class MicroAssignment1 {
             //use file reader to load the property
             configProperties.load(configFileReader);
 
-            //set the web driver
-            System.setProperty("webdriver.chrome.driver", configProperties.getProperty("selenium.driver.chrome"));
+            if(browser.equalsIgnoreCase("chrome")) {
+                //set the web driver
+                System.setProperty("webdriver.chrome.driver", configProperties.getProperty("selenium.driver.chrome"));
+                //initiate the web driver
+                webDriver = new ChromeDriver();
 
-            //initiate the web driver
-            webDriver = new ChromeDriver();
-
-        }catch (Exception e) {
+            } else if(browser.equalsIgnoreCase("edge")) {
+                //set the web driver
+                System.setProperty("webdriver.edge.driver", configProperties.getProperty("selenium.driver.edge"));
+                //initiate the web driver
+                webDriver = new EdgeDriver();
+            }
+        } catch (Exception e) {
 
             LOGGER.info("Error occurred in closing the file: " + e.getMessage());
 
