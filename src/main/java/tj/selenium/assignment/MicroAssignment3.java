@@ -6,24 +6,21 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-public class CrossBrowserTest {
+public class MicroAssignment3 {
+    Logger LOGGER = LoggerFactory.getLogger(MicroAssignment3.class);
 
-    //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(CrossBrowserTest.class);
-
-    //Defining web driver
     WebDriver webDriver = null;
 
     //Defining file Reader
@@ -35,9 +32,10 @@ public class CrossBrowserTest {
     //Defining the properties
     Properties configProperties;
 
+
     @BeforeClass
     @Parameters("browser")
-    public void configSetup(String browser) {
+    public void setupConfiguration(@Optional("na") String browser) {
         try {
 
             //Assigning to the filepath to a variable
@@ -67,23 +65,28 @@ public class CrossBrowserTest {
                 //initiate the web driver
                 webDriver = new EdgeDriver();
             }
+
+
         } catch (Exception e) {
 
             LOGGER.info("Error occurred in closing the file: " + e.getMessage());
 
-        }finally {
+        } finally {
+
             try {
 
                 configFileReader.close();
 
             } catch (Exception e) {
+
                 LOGGER.info("Error occurred in closing the file: " + e.getMessage());
             }
+
         }
     }
 
     @Test
-    public void validateInput(){
+    public void validateTheRecordCanBeFindByFilters() {
         try {
 
             //Navigate to the site
@@ -91,32 +94,33 @@ public class CrossBrowserTest {
 
             webDriver.manage().window().maximize();
 
-            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver,10);
+            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver, 10);
             WebElement noThanksBtn = waitForNoThanksBtn.until(ExpectedConditions
                     .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a[@href='#']")));
             noThanksBtn.click();
 
-            WebDriverWait waitForTextBox = new WebDriverWait(webDriver,10);
-            WebElement textBox = waitForTextBox.until(ExpectedConditions
-                    .elementToBeClickable(By.id("user-message")));
-            textBox.sendKeys(configProperties.getProperty("selenium.micro.assignment1.expectedResult"));
+            WebDriverWait waitForTableLink = new WebDriverWait(webDriver, 10);
+            WebElement tableLink = waitForTableLink.until(ExpectedConditions
+                    .elementToBeClickable(By.xpath("//*[@id='treemenu']/li/ul/li[3]/a")));
+            tableLink.click();
 
-            WebElement messageButton = webDriver.findElement(By.xpath("//*[@id='get-input']/button"));
-            messageButton.click();
+            WebElement sortAndSearchLink = webDriver.findElement(By.xpath("//*[@id='treemenu']/li/ul/li[3]/ul/li[4]/a"));
+            sortAndSearchLink.click();
 
-            WebDriverWait waitForDisplayMessage = new WebDriverWait(webDriver,10);
-            WebElement displayMessage = waitForDisplayMessage.until(ExpectedConditions
-                    .visibilityOfElementLocated(By.id("display")));
+            WebDriverWait waitForEntitiesDropDown = new WebDriverWait(webDriver, 10);
+            WebElement dropDown = waitForEntitiesDropDown.until(ExpectedConditions
+                    .presenceOfElementLocated(By.name("example_length")));
+            Select entitiesDropDown = new Select(dropDown);
+            entitiesDropDown.selectByVisibleText("25");
 
-            String expectedResult = configProperties.getProperty("selenium.micro.assignment1.expectedResult");
-            String actualResult = displayMessage.getText().trim();
-            LOGGER.info("Actual : " + actualResult + " Expected : " + expectedResult);
-            Assert.assertEquals(actualResult, expectedResult);
+            WebElement searchBox = webDriver.findElement(By.xpath("//*[@id='example_filter']/label/input[@type='search']"));
+            searchBox.sendKeys("Accountant");
+
 
         }catch (Exception e) {
 
             LOGGER.info("Error occurred : " + e.getMessage());
-
+            Assert.fail("Exception Occured" + e.getMessage(),e);
         }
 
     }
@@ -125,9 +129,9 @@ public class CrossBrowserTest {
     public void closeWebDriver() {
 
         webDriver.close();
-
         webDriver.quit();
 
         LOGGER.info("Browser close successfully!");
     }
+
 }

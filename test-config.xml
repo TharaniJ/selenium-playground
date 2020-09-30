@@ -2,12 +2,42 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="Assignment" verbose="1">
-    <parameter name="browser" value="chrome"></parameter>
-    <test name="Validate-The-Input-Text-of-The-Text-Field" >
+    <test name="Validate-Cross-Browser-Testing" >
+        <parameter name="browser" value="chrome"></parameter>
         <classes>
             <class name="tj.selenium.assignment.CrossBrowserTest">
                 <methods>
                     <include name="validateInput"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Validate-The-Input-Text-of-The-Text-Field" >
+        <parameter name="browser" value="chrome"></parameter>
+        <classes>
+            <class name="tj.selenium.assignment.MicroAssignment1">
+                <methods>
+                    <include name="validateInput"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Validate-The-Total-No-Of-Row-In-The-Table" >
+        <parameter name="browser" value="chrome"></parameter>
+        <classes>
+            <class name="tj.selenium.assignment.MicroAssignment2">
+                <methods>
+                    <include name="validateNoOfRowsInTheTable"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Validate-The-DropDown-Selection" >
+        <parameter name="browser" value="chrome"></parameter>
+        <classes>
+            <class name="tj.selenium.assignment.MicroAssignment3">
+                <methods>
+                    <include name="validateTheRecordCanBeFindByFilters"/>
                 </methods>
             </class>
         </classes>
