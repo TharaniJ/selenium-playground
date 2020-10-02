@@ -1,5 +1,6 @@
 package tj.selenium.assignment;
 
+import javafx.scene.layout.Priority;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,10 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
@@ -55,13 +53,13 @@ public class CrossBrowserTest {
             //use file reader to load the property
             configProperties.load(configFileReader);
 
-            if(browser.equalsIgnoreCase("chrome")) {
+            if (browser.equalsIgnoreCase("chrome")) {
                 //set the web driver
                 System.setProperty("webdriver.chrome.driver", configProperties.getProperty("selenium.driver.chrome"));
                 //initiate the web driver
                 webDriver = new ChromeDriver();
 
-            } else if(browser.equalsIgnoreCase("edge")) {
+            } else if (browser.equalsIgnoreCase("edge")) {
                 //set the web driver
                 System.setProperty("webdriver.edge.driver", configProperties.getProperty("selenium.driver.edge"));
                 //initiate the web driver
@@ -71,7 +69,7 @@ public class CrossBrowserTest {
 
             LOGGER.info("Error occurred in closing the file: " + e.getMessage());
 
-        }finally {
+        } finally {
             try {
 
                 configFileReader.close();
@@ -82,8 +80,13 @@ public class CrossBrowserTest {
         }
     }
 
-    @Test
-    public void validateInput(){
+    @Test(priority = 2)
+    public  void HelloMessage(){
+        LOGGER.info("Hello Everyone ! how is going life? ");
+    }
+
+    @Test(priority = 1)
+    public void validateInput() {
         try {
 
             //Navigate to the site
@@ -91,29 +94,26 @@ public class CrossBrowserTest {
 
             webDriver.manage().window().maximize();
 
-            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver,10);
+            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver, 10);
             WebElement noThanksBtn = waitForNoThanksBtn.until(ExpectedConditions
                     .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a[@href='#']")));
             noThanksBtn.click();
 
-            WebDriverWait waitForTextBox = new WebDriverWait(webDriver,10);
+            LOGGER.info("Clicked no thanks button");
+
+            WebDriverWait waitForTextBox = new WebDriverWait(webDriver, 10);
             WebElement textBox = waitForTextBox.until(ExpectedConditions
                     .elementToBeClickable(By.id("user-message")));
             textBox.sendKeys(configProperties.getProperty("selenium.micro.assignment1.expectedResult"));
 
+            LOGGER.info("Typed good morning message");
+
             WebElement messageButton = webDriver.findElement(By.xpath("//*[@id='get-input']/button"));
             messageButton.click();
 
-            WebDriverWait waitForDisplayMessage = new WebDriverWait(webDriver,10);
-            WebElement displayMessage = waitForDisplayMessage.until(ExpectedConditions
-                    .visibilityOfElementLocated(By.id("display")));
+            LOGGER.info("Clicked on Submit button");
 
-            String expectedResult = configProperties.getProperty("selenium.micro.assignment1.expectedResult");
-            String actualResult = displayMessage.getText().trim();
-            LOGGER.info("Actual : " + actualResult + " Expected : " + expectedResult);
-            Assert.assertEquals(actualResult, expectedResult);
-
-        }catch (Exception e) {
+        } catch (Exception e) {
 
             LOGGER.info("Error occurred : " + e.getMessage());
 
@@ -121,7 +121,30 @@ public class CrossBrowserTest {
 
     }
 
-    @AfterMethod
+    @Test(priority = 3)
+    public void validateResult() {
+        try {
+
+            WebDriverWait waitForDisplayMessage = new WebDriverWait(webDriver, 10);
+            WebElement displayMessage = waitForDisplayMessage.until(ExpectedConditions
+                    .visibilityOfElementLocated(By.id("display")));
+
+            LOGGER.info("Validate the display message");
+
+            String expectedResult = configProperties.getProperty("selenium.micro.assignment1.expectedResult");
+            String actualResult = displayMessage.getText().trim();
+            LOGGER.info("Actual : " + actualResult + " Expected : " + expectedResult);
+            Assert.assertEquals(actualResult, expectedResult);
+
+
+        }catch (Exception e){
+            LOGGER.info("Error occurred : " + e.getMessage());
+        }
+    }
+
+
+
+    @AfterClass
     public void closeWebDriver() {
 
         webDriver.close();

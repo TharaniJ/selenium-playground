@@ -45,6 +45,11 @@
       <artifactId>testng</artifactId>
       <version>6.8</version>
     </dependency>
+    <dependency>
+      <groupId>ru.yandex.qatools.ashot</groupId>
+      <artifactId>ashot</artifactId>
+      <version>1.5.4</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -66,6 +71,11 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <suiteXmlFiles>
+              <suiteXmlFile>test-config.xml</suiteXmlFile>
+            </suiteXmlFiles>
+          </configuration>
           <version>2.22.1</version>
         </plugin>
         <plugin>

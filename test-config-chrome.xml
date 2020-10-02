@@ -5,9 +5,11 @@
     <test name="Validate-The-Input-Text-of-The-Text-Field" >
         <parameter name="browser" value="chrome"></parameter>
         <classes>
-            <class name="tj.selenium.assignment.MicroAssignment3">
+            <class name="tj.selenium.assignment.CrossBrowserTest">
                 <methods>
                     <include name="validateInput"/>
+                    <include name="validateResult"/>
+                    <include name="HelloMessage"/>
                 </methods>
             </class>
         </classes>
