@@ -41,7 +41,6 @@ public class ActionClassMouseOverMovement {
             WebDriverWait waitForSearchIcon = new WebDriverWait(webDriver,10);
             waitForSearchIcon.until(ExpectedConditions.visibilityOf(moodleHomePage.getSearchIconButton()));
 
-
             Actions mouseMoveOverAction = new Actions(webDriver);
             mouseMoveOverAction.moveToElement(moodleHomePage.getSearchIconButton()).perform();
             LOGGER.info("Moved mouse over Search the search box");

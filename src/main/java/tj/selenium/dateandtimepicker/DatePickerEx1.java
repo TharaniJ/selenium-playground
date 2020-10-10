@@ -16,7 +16,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import org.testng.annotations.Test;
 
-public class DatePicker {
+public class DatePickerEx1 {
 
     @Test
 

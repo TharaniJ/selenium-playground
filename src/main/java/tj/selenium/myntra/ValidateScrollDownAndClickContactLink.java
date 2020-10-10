@@ -1,11 +1,11 @@
-package tj.selenium.assignment;
+package tj.selenium.myntra;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +13,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class MicroAssignment4 {
+public class ValidateScrollDownAndClickContactLink {
     //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(MicroAssignment4.class);
+    Logger LOGGER = LoggerFactory.getLogger(ValidateScrollDownAndClickContactLink.class);
 
     //Defining web driver
     WebDriver webDriver = null;
@@ -75,36 +74,34 @@ public class MicroAssignment4 {
     }
 
     @Test
-    public void handleAlert() {
+    public void validateScrollDownAndClickLink() {
         try {
 
             //Navigate to the moodle site
+            webDriver.manage().deleteAllCookies();
+
             webDriver.get(configProperties.getProperty("selenium.micro.assignment.validateMouseMovement"));
 
             webDriver.manage().window().maximize();
-/*
-            //Wait to click on NoThanks button from wondow
-            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver,10);
-            WebElement noThanksBtn = waitForNoThanksBtn.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a")));
-            noThanksBtn.click();
+
+            JavascriptExecutor js = (JavascriptExecutor) webDriver;
+
+            WebDriverWait waitForContactUsLink = new WebDriverWait(webDriver, 10);
+            WebElement contactUs = waitForContactUsLink
+                    .until(ExpectedConditions.elementToBeClickable(By
+                            .xpath("//body/div[4]/div[1]/div[1]/footer[1]/div[1]/div[3]/div[1]/a[1]")));
+            LOGGER.info("Located the element");
+
+            js.executeScript("arguments[0].scrollIntoView();", contactUs);
+
+            LOGGER.info("Scrolled down");
+
+            contactUs.click();
+            LOGGER.info("Clicked Successfully");
+
+            Thread.sleep(3000);
 
 
-            WebDriverWait waitForAlertsAndModels = new WebDriverWait(webDriver, 10);
-            WebElement alertsAndModelsLink = waitForAlertsAndModels.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[5]/a")));
-            alertsAndModelsLink.click();
-
-            WebElement bootStrapAlertLink = webDriver.findElement(By.xpath("//*[@id='treemenu']/li/ul/li[5]/ul/li[1]/a"));
-            bootStrapAlertLink.click();
-
-
-            WebDriverWait waitForEntitiesDropDown = new WebDriverWait(webDriver, 10);
-            WebElement dropDown = waitForEntitiesDropDown.until(ExpectedConditions
-                    .presenceOfElementLocated(By.className("dropdown-toggle")));
-            Select entitiesDropDown = new Select(dropDown);
-            entitiesDropDown.selectByVisibleText("Bootstrap Modals");
-*/
 
         } catch (Exception e) {
 
@@ -124,3 +121,4 @@ public class MicroAssignment4 {
     }
 
 }
+

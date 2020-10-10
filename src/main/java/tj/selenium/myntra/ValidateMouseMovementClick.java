@@ -1,11 +1,12 @@
-package tj.selenium.assignment;
+package tj.selenium.myntra;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +14,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class MicroAssignment4 {
+public class ValidateMouseMovementClick {
+
     //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(MicroAssignment4.class);
+    Logger LOGGER = LoggerFactory.getLogger(ValidateMouseMovementClick.class);
 
     //Defining web driver
     WebDriver webDriver = null;
@@ -75,36 +76,43 @@ public class MicroAssignment4 {
     }
 
     @Test
-    public void handleAlert() {
+    public void validateMouseOverMovementClick() {
         try {
 
             //Navigate to the moodle site
+            webDriver.manage().deleteAllCookies();
+
             webDriver.get(configProperties.getProperty("selenium.micro.assignment.validateMouseMovement"));
 
             webDriver.manage().window().maximize();
-/*
-            //Wait to click on NoThanks button from wondow
-            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver,10);
-            WebElement noThanksBtn = waitForNoThanksBtn.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a")));
-            noThanksBtn.click();
+
+            WebDriverWait waitForOffersButton = new WebDriverWait(webDriver, 10);
+            WebElement offerButton = waitForOffersButton
+                    .until(ExpectedConditions.elementToBeClickable(By
+                            .xpath("//*[@id='desktop-header-cnt']/div[2]/nav/div/div[5]/div[@class='desktop-navLink']")));
+
+            Actions mouseMoveOverAction = new Actions(webDriver);
+            mouseMoveOverAction.moveToElement(offerButton).perform();
 
 
-            WebDriverWait waitForAlertsAndModels = new WebDriverWait(webDriver, 10);
-            WebElement alertsAndModelsLink = waitForAlertsAndModels.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[5]/a")));
-            alertsAndModelsLink.click();
+            WebDriverWait waitForSelectMenu = new WebDriverWait(webDriver, 10);
+            WebElement selectMenu = waitForSelectMenu
+                    .until(ExpectedConditions.elementToBeClickable(By
+                            .xpath("//*[@id='desktop-header-cnt']/div[2]/nav/div/div[5]/div/div/div/div/li[1]/ul/li[1]/a[@class='desktop-categoryName']")));
+            selectMenu.click();
 
-            WebElement bootStrapAlertLink = webDriver.findElement(By.xpath("//*[@id='treemenu']/li/ul/li[5]/ul/li[1]/a"));
-            bootStrapAlertLink.click();
+            WebDriverWait waitSortBy = new WebDriverWait(webDriver, 10);
+            WebElement sortBy = waitSortBy
+                    .until(ExpectedConditions.elementToBeClickable(By
+                            .xpath("//*[@id='desktopSearchResults']/div[1]/section/div[1]/div[@class='horizontal-filters-sortContainer']")));
+
+            mouseMoveOverAction.moveToElement(sortBy).perform();
+            WebElement betterDiscountOption = webDriver.findElement(By
+                    .xpath("//*[@id=\"desktopSearchResults\"]/div[1]/section/div[1]/div[1]/div/div/div/ul/li[3]/label"));
+            betterDiscountOption.click();
 
 
-            WebDriverWait waitForEntitiesDropDown = new WebDriverWait(webDriver, 10);
-            WebElement dropDown = waitForEntitiesDropDown.until(ExpectedConditions
-                    .presenceOfElementLocated(By.className("dropdown-toggle")));
-            Select entitiesDropDown = new Select(dropDown);
-            entitiesDropDown.selectByVisibleText("Bootstrap Modals");
-*/
+
 
         } catch (Exception e) {
 
