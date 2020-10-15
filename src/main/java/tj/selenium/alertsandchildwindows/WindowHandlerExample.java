@@ -32,7 +32,7 @@ public class WindowHandlerExample {
 
         Logger LOGGER = LoggerFactory.getLogger(WindowHandlerExample.class);
 
-        String filePath = "src/main/resources/application.properties";
+        String filePath = "data/configuration.properties";
         File applicationPropertiesFile = new File(filePath);
 
         Properties applicationProperties = new Properties();

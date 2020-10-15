@@ -1,11 +1,11 @@
 package tj.selenium.assignment;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +13,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class MicroAssignment4 {
+public class ConfirmationAlertPopup {
     //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(MicroAssignment4.class);
+    Logger LOGGER = LoggerFactory.getLogger(ConfirmationAlertPopup.class);
 
     //Defining web driver
     WebDriver webDriver = null;
@@ -75,36 +74,35 @@ public class MicroAssignment4 {
     }
 
     @Test
-    public void handleAlert() {
+    public void validateConfirmationAlertPopup() {
         try {
 
             //Navigate to the moodle site
-            webDriver.get(configProperties.getProperty("selenium.micro.assignment.validateMouseMovement"));
+            webDriver.manage().deleteAllCookies();
+
+            webDriver.get(configProperties.getProperty("selenium.moodle.url.indexOfPractice"));
 
             webDriver.manage().window().maximize();
 
-            //Wait to click on NoThanks button from wondow
-            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver,10);
-            WebElement noThanksBtn = waitForNoThanksBtn.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a")));
-            noThanksBtn.click();
+            WebDriverWait waitForPopupLink = new WebDriverWait(webDriver, 10);
+            WebElement popUpLink = waitForPopupLink.until(ExpectedConditions
+                    .visibilityOfElementLocated(By.xpath("/html/body/pre/a[24]")));
+            popUpLink.click();
 
+            WebElement confirmationButton = webDriver.findElement(By.name("confirmation"));
+            confirmationButton.click();
+            LOGGER.info("Click confirmation button");
 
-            WebDriverWait waitForAlertsAndModels = new WebDriverWait(webDriver, 10);
-            WebElement alertsAndModelsLink = waitForAlertsAndModels.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[5]/a")));
-            alertsAndModelsLink.click();
+            // Explicitly waiting for 10 seconds until the Alert appears.
+            WebDriverWait waitForConfirmationAlert = new WebDriverWait(webDriver, 10);
+            waitForConfirmationAlert.until(ExpectedConditions.alertIsPresent());
+            LOGGER.info("Confirmation Alert present");
 
-            WebElement bootStrapAlertLink = webDriver.findElement(By.xpath("//*[@id='treemenu']/li/ul/li[5]/ul/li[1]/a"));
-            bootStrapAlertLink.click();
+            Alert confirmAlert = webDriver.switchTo().alert();
 
-
-            WebDriverWait waitForEntitiesDropDown = new WebDriverWait(webDriver, 10);
-            WebElement dropDown = waitForEntitiesDropDown.until(ExpectedConditions
-                    .presenceOfElementLocated(By.className("dropdown-toggle")));
-            Select entitiesDropDown = new Select(dropDown);
-            entitiesDropDown.selectByVisibleText("Bootstrap Modals");
-
+            Thread.sleep(3000); // To see the alert properly. No need otherwise
+            confirmAlert.dismiss();
+            LOGGER.info("Dismissed the alert");
 
         } catch (Exception e) {
 
@@ -122,5 +120,6 @@ public class MicroAssignment4 {
 
         LOGGER.info("Browser close successfully!");
     }
+
 
 }

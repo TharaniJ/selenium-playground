@@ -1,42 +1,26 @@
-/**
- * Micro-Test-1
- *
- * Steps:
- * Load this URL - https://www.seleniumeasy.com/test/basic-first-form-demo.html
- * Under “Single Input Field” form, enter the text “Test” in the text box
- * Click “Show Message”
- * Check whether it updates “Your Message:” to “Your Message: Test”
- *
- * Technical Requirements:
- * Must be implemented in a TestNG test case
- * A test configuration should be present
- */
-
-
 package tj.selenium.assignment;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import tj.selenium.alertsandchildwindows.HandleChildWindow;
 
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class MicroAssignment1 {
+public class DoubleClickButtonAndAcceptAlert {
     //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(HandleChildWindow.class);
+    Logger LOGGER = LoggerFactory.getLogger(DoubleClickButtonAndAcceptAlert.class);
 
     //Defining web driver
     WebDriver webDriver = null;
@@ -91,42 +75,42 @@ public class MicroAssignment1 {
     }
 
     @Test
-    public void validateInput(){
+    public void validateDoubleClick() {
         try {
 
             //Navigate to the moodle site
-            webDriver.get(configProperties.getProperty("selenium.micro.assignment1"));
+            webDriver.manage().deleteAllCookies();
+
+            webDriver.get(configProperties.getProperty("selenium.moodle.url.indexOfPractice"));
 
             webDriver.manage().window().maximize();
 
-            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver,10);
-            WebElement noThanksBtn = waitForNoThanksBtn.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a[@href='#']")));
-            noThanksBtn.click();
+            WebDriverWait waitForPopupLink = new WebDriverWait(webDriver, 10);
+            WebElement popUpLink = waitForPopupLink.until(ExpectedConditions
+                    .visibilityOfElementLocated(By.xpath("/html/body/pre/a[24]")));
+            popUpLink.click();
 
-            WebDriverWait waitForTextBox = new WebDriverWait(webDriver,10);
-            WebElement textBox = waitForTextBox.until(ExpectedConditions
-                    .elementToBeClickable(By.id("user-message")));
-            textBox.sendKeys(configProperties.getProperty("selenium.micro.assignment1.expectedResult"));
+            Actions actions = new Actions(webDriver);
+            WebElement doubleClickButton = webDriver.findElement(By.id("double-click"));
+            actions.doubleClick(doubleClickButton).perform();
+            LOGGER.info("DoubleClick the button!");
 
-            WebElement messageButton = webDriver.findElement(By.xpath("//*[@id='get-input']/button"));
-            messageButton.click();
+            // Explicitly waiting for 10 seconds until the Alert appears.
+            WebDriverWait waitForAlert = new WebDriverWait(webDriver, 10);
+            waitForAlert.until(ExpectedConditions.alertIsPresent());
+            LOGGER.info("Confirmation Alert present");
 
-            WebDriverWait waitForDisplayMessage = new WebDriverWait(webDriver,10);
-            WebElement displayMessage = waitForDisplayMessage.until(ExpectedConditions
-                    .visibilityOfElementLocated(By.id("display")));
+            Alert alert = webDriver.switchTo().alert();
 
-            String expectedResult = configProperties.getProperty("selenium.micro.assignment1.expectedResult");
-            String actualResult = displayMessage.getText().trim();
-            LOGGER.info("Actual : " + actualResult + " Expected : " + expectedResult);
-            Assert.assertEquals(actualResult, expectedResult);
+            Thread.sleep(3000); // To see the alert properly. No need otherwise
+            alert.accept();
+            LOGGER.info("Accepted the alert");
 
-        }catch (Exception e) {
+        } catch (Exception e) {
 
             LOGGER.info("Error occurred : " + e.getMessage());
 
         }
-
     }
 
     @AfterMethod
@@ -138,4 +122,6 @@ public class MicroAssignment1 {
 
         LOGGER.info("Browser close successfully!");
     }
+
+
 }

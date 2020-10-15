@@ -12,16 +12,15 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import tj.selenium.alertsandchildwindows.HandleChildWindow;
 
 import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
 
-public class MicroAssignment2 {
+public class GetRowCountFromTable {
     //Initiating logger
-    private Logger LOGGER = LoggerFactory.getLogger(MicroAssignment2.class);
+    private Logger LOGGER = LoggerFactory.getLogger(GetRowCountFromTable.class);
 
     //Defining web driver
     private WebDriver webDriver = null;

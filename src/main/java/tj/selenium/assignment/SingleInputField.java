@@ -1,3 +1,18 @@
+/**
+ * Micro-Test-1
+ *
+ * Steps:
+ * Load this URL - https://www.seleniumeasy.com/test/basic-first-form-demo.html
+ * Under “Single Input Field” form, enter the text “Test” in the text box
+ * Click “Show Message”
+ * Check whether it updates “Your Message:” to “Your Message: Test”
+ *
+ * Technical Requirements:
+ * Must be implemented in a TestNG test case
+ * A test configuration should be present
+ */
+
+
 package tj.selenium.assignment;
 
 import org.openqa.selenium.By;
@@ -5,22 +20,23 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
+import tj.selenium.alertsandchildwindows.HandleChildWindow;
 
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class MicroAssignment4 {
+public class SingleInputField {
     //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(MicroAssignment4.class);
+    Logger LOGGER = LoggerFactory.getLogger(HandleChildWindow.class);
 
     //Defining web driver
     WebDriver webDriver = null;
@@ -75,42 +91,42 @@ public class MicroAssignment4 {
     }
 
     @Test
-    public void handleAlert() {
+    public void validateInput(){
         try {
 
             //Navigate to the moodle site
-            webDriver.get(configProperties.getProperty("selenium.micro.assignment.validateMouseMovement"));
+            webDriver.get(configProperties.getProperty("selenium.micro.assignment1"));
 
             webDriver.manage().window().maximize();
 
-            //Wait to click on NoThanks button from wondow
             WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver,10);
             WebElement noThanksBtn = waitForNoThanksBtn.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a")));
+                    .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a[@href='#']")));
             noThanksBtn.click();
 
+            WebDriverWait waitForTextBox = new WebDriverWait(webDriver,10);
+            WebElement textBox = waitForTextBox.until(ExpectedConditions
+                    .elementToBeClickable(By.id("user-message")));
+            textBox.sendKeys(configProperties.getProperty("selenium.micro.assignment1.expectedResult"));
 
-            WebDriverWait waitForAlertsAndModels = new WebDriverWait(webDriver, 10);
-            WebElement alertsAndModelsLink = waitForAlertsAndModels.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[5]/a")));
-            alertsAndModelsLink.click();
+            WebElement messageButton = webDriver.findElement(By.xpath("//*[@id='get-input']/button"));
+            messageButton.click();
 
-            WebElement bootStrapAlertLink = webDriver.findElement(By.xpath("//*[@id='treemenu']/li/ul/li[5]/ul/li[1]/a"));
-            bootStrapAlertLink.click();
+            WebDriverWait waitForDisplayMessage = new WebDriverWait(webDriver,10);
+            WebElement displayMessage = waitForDisplayMessage.until(ExpectedConditions
+                    .visibilityOfElementLocated(By.id("display")));
 
+            String expectedResult = configProperties.getProperty("selenium.micro.assignment1.expectedResult");
+            String actualResult = displayMessage.getText().trim();
+            LOGGER.info("Actual : " + actualResult + " Expected : " + expectedResult);
+            Assert.assertEquals(actualResult, expectedResult);
 
-            WebDriverWait waitForEntitiesDropDown = new WebDriverWait(webDriver, 10);
-            WebElement dropDown = waitForEntitiesDropDown.until(ExpectedConditions
-                    .presenceOfElementLocated(By.className("dropdown-toggle")));
-            Select entitiesDropDown = new Select(dropDown);
-            entitiesDropDown.selectByVisibleText("Bootstrap Modals");
-
-
-        } catch (Exception e) {
+        }catch (Exception e) {
 
             LOGGER.info("Error occurred : " + e.getMessage());
 
         }
+
     }
 
     @AfterMethod
@@ -122,5 +138,4 @@ public class MicroAssignment4 {
 
         LOGGER.info("Browser close successfully!");
     }
-
 }

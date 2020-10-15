@@ -15,7 +15,7 @@
     <test name="Validate-The-Input-Text-of-The-Text-Field" >
         <parameter name="browser" value="chrome"></parameter>
         <classes>
-            <class name="tj.selenium.assignment.MicroAssignment1">
+            <class name="tj.selenium.assignment.SingleInputField">
                 <methods>
                     <include name="validateInput"/>
                 </methods>
@@ -25,7 +25,7 @@
     <test name="Validate-The-Total-No-Of-Row-In-The-Table" >
         <parameter name="browser" value="chrome"></parameter>
         <classes>
-            <class name="tj.selenium.assignment.MicroAssignment2">
+            <class name="tj.selenium.assignment.GetRowCountFromTable">
                 <methods>
                     <include name="validateNoOfRowsInTheTable"/>
                 </methods>

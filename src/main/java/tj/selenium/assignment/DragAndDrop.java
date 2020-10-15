@@ -4,8 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +13,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class MicroAssignment4 {
+public class DragAndDrop {
     //Initiating logger
-    Logger LOGGER = LoggerFactory.getLogger(MicroAssignment4.class);
+    Logger LOGGER = LoggerFactory.getLogger(DragAndDrop.class);
 
     //Defining web driver
     WebDriver webDriver = null;
@@ -75,36 +74,43 @@ public class MicroAssignment4 {
     }
 
     @Test
-    public void handleAlert() {
+    public void validateDragAndDrop() {
         try {
 
             //Navigate to the moodle site
-            webDriver.get(configProperties.getProperty("selenium.micro.assignment.validateMouseMovement"));
+            webDriver.manage().deleteAllCookies();
+
+            webDriver.get(configProperties.getProperty("selenium.moodle.url.indexOfPractice"));
 
             webDriver.manage().window().maximize();
 
-            //Wait to click on NoThanks button from wondow
-            WebDriverWait waitForNoThanksBtn = new WebDriverWait(webDriver,10);
-            WebElement noThanksBtn = waitForNoThanksBtn.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id='at-cv-lightbox-button-holder']/a")));
-            noThanksBtn.click();
+            WebDriverWait waitForDragAndDropLink = new WebDriverWait(webDriver, 10);
+            WebElement dragAndDrop = waitForDragAndDropLink.until(ExpectedConditions
+                    .visibilityOfElementLocated(By.xpath("/html/body/pre/a[11]")));
+            dragAndDrop.click();
 
+            // Find the element which need to be drag
+            WebElement sourceElement = webDriver.findElement(By.id("box3"));
+            LOGGER.info("Identified the source element");
 
-            WebDriverWait waitForAlertsAndModels = new WebDriverWait(webDriver, 10);
-            WebElement alertsAndModelsLink = waitForAlertsAndModels.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[5]/a")));
-            alertsAndModelsLink.click();
+            // Find the element where is to be drop
+            WebElement targetElement = webDriver.findElement(By.id("destination"));
+            LOGGER.info("Identified the targeted element");
 
-            WebElement bootStrapAlertLink = webDriver.findElement(By.xpath("//*[@id='treemenu']/li/ul/li[5]/ul/li[1]/a"));
-            bootStrapAlertLink.click();
+            //initiate the explicit wait
+            WebDriverWait waitForVisibility = new WebDriverWait(webDriver, 10);
 
+            // Waiting or visibility of elements
+            waitForVisibility.until(ExpectedConditions.visibilityOf(sourceElement));
+            waitForVisibility.until(ExpectedConditions.visibilityOf(targetElement));
 
-            WebDriverWait waitForEntitiesDropDown = new WebDriverWait(webDriver, 10);
-            WebElement dropDown = waitForEntitiesDropDown.until(ExpectedConditions
-                    .presenceOfElementLocated(By.className("dropdown-toggle")));
-            Select entitiesDropDown = new Select(dropDown);
-            entitiesDropDown.selectByVisibleText("Bootstrap Modals");
+            Thread.sleep(3000);// To see properly. otherwise not required
+            // Use Actions class to mimic Mouse Move and Hover behavior
+            Actions dragAndDropAction = new Actions(webDriver);
+            dragAndDropAction.dragAndDrop(sourceElement, targetElement).perform();
 
+            Thread.sleep(3000);// To see properly. otherwise not required
+            LOGGER.info("Drag and Drop complete.");
 
         } catch (Exception e) {
 
@@ -122,5 +128,6 @@ public class MicroAssignment4 {
 
         LOGGER.info("Browser close successfully!");
     }
+
 
 }
