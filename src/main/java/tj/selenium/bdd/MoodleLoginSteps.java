@@ -22,14 +22,14 @@ public class MoodleLoginSteps {
 
     WebDriver webDriver ;
 
-//    @Before
-//    public void validateStemConfig(){
-//
-//        System.setProperty("webdriver.chrome.driver","C:/EDU/Software/chromedriver_win32/chromedriver.exe");
-//
-//        webDriver = new ChromeDriver();
-//
-//    }
+    @Before
+    public void validateStemConfig(){
+
+        System.setProperty("webdriver.chrome.driver","C:/EDU/Software/chromedriver_win32/chromedriver.exe");
+
+        webDriver = new ChromeDriver();
+
+    }
 
     @Given("User navigate to the moodle site")
     public void userNavigateToTheMoodleSite() {
@@ -136,13 +136,13 @@ public class MoodleLoginSteps {
         assertEquals(actualResult,expectedResult);
     }
 
-//    @After
-//    public void closeWebDriver() {
-//
-//        webDriver.close();
-//
-//        webDriver.quit();
-//
-//        LOGGER.info("Browser close successfully!");
-//    }
+    @After
+    public void closeWebDriver() {
+
+        webDriver.close();
+
+        webDriver.quit();
+
+        LOGGER.info("Browser close successfully!");
+    }
 }
