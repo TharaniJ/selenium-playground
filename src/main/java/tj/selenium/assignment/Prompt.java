@@ -106,6 +106,9 @@ public class Prompt {
             Thread.sleep(3000); // To see the alert properly. Otherwise not required
 
             promptAlert.sendKeys("Test User");
+
+            Thread.sleep(20000);
+
             LOGGER.info("Send the text to the prompt!");
 
             promptAlert.accept();

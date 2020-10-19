@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class MoodleHomePage {
 
-    @FindBy(xpath = "//*[@id='page-wrapper']/nav//a[text()='Log in']")
+    @FindBy(xpath = "//*[@id=\"page-wrapper\"]/nav/ul[2]/li[3]/div/span/a")
     @CacheLookup
     private WebElement loginLink;
 
